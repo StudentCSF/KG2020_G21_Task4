@@ -1,4 +1,4 @@
-package course2.kg.task4.math3d;
+package course2.kg.task4.binary3d;
 
 import course2.kg.task4.third.IModel;
 

@@ -11,10 +11,10 @@ import course2.kg.task4.math.Vector3;
  * @author Alexey
  */
 public class ScreenConverter {
-    double xr, yr, wr, hr;
+    float xr, yr, wr, hr;
     int ws, hs;
 
-    public ScreenConverter(double xr, double yr, double wr, double hr, int ws, int hs) {
+    public ScreenConverter(float xr, float yr, float wr, float hr, int ws, int hs) {
         this.xr = xr;
         this.yr = yr;
         this.wr = wr;
@@ -30,8 +30,8 @@ public class ScreenConverter {
      * @return результирующая экранная точка.
      */
     public ScreenPoint r2s(Vector3 v) {
-        int i = (int)((v.getX() - xr) * ws / wr);
-        int j = (int)((yr - v.getY()) * hs / hr);
+        int i = Math.round((v.getX() - xr) * ws / wr);
+        int j = Math.round((yr - v.getY()) * hs / hr);
         return new ScreenPoint(i, j);
     }
     
@@ -72,7 +72,7 @@ public class ScreenConverter {
         return hr;
     }
 
-    public void setHr(double hr) {
+    public void setHr(float hr) {
         this.hr = hr;
     }
 
@@ -88,7 +88,7 @@ public class ScreenConverter {
         return wr;
     }
 
-    public void setWr(double wr) {
+    public void setWr(float wr) {
         this.wr = wr;
     }
 
@@ -104,7 +104,7 @@ public class ScreenConverter {
         return xr;
     }
 
-    public void setXr(double xr) {
+    public void setXr(float xr) {
         this.xr = xr;
     }
 
@@ -112,7 +112,7 @@ public class ScreenConverter {
         return yr;
     }
 
-    public void setYr(double yr) {
+    public void setYr(float yr) {
         this.yr = yr;
     }
     
