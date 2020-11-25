@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import course2.kg.task4.draw.IDrawer;
 import course2.kg.task4.draw.SimpleEdgeDrawer;
+import course2.kg.task4.draw.SimpleSideDrawer;
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.screen.ScreenConverter;
 import course2.kg.task4.third.Camera;
@@ -53,7 +54,8 @@ public class DrawPanel extends JPanel
         sc.setScreenSize(getWidth(), getHeight());
         BufferedImage bi = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
         Graphics2D graphics = (Graphics2D)bi.getGraphics();
-        IDrawer dr = new SimpleEdgeDrawer(sc, graphics);
+//        IDrawer dr = new SimpleEdgeDrawer(sc, graphics);
+        IDrawer dr = new SimpleSideDrawer(sc, graphics);
         scene.drawScene(dr, cam);
         g.drawImage(bi, 0, 0, null);
         graphics.dispose();
