@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import course2.kg.task4.screen.ScreenConverter;
+import course2.kg.task4.third.ICamera;
 import course2.kg.task4.third.PolyLine3D;
 
 /**

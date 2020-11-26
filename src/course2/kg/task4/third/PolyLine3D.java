@@ -4,6 +4,7 @@
  */
 package course2.kg.task4.third;
 
+import java.awt.*;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,15 +18,25 @@ import course2.kg.task4.math.Vector3;
 public class PolyLine3D {
     private List<Vector3> points;
     private boolean closed;
+    private Color color;
 
     /**
      * Создаёт новую полилинию на основе трёхмерных точек.
      * @param points список точек-вершин ломанной
      * @param closed признак замкнутостит линии
      */
-    public PolyLine3D(Collection<Vector3> points, boolean closed) {
+    public PolyLine3D(Collection<Vector3> points, boolean closed, Color color) {
         this.points = new LinkedList<Vector3>(points);
         this.closed = closed;
+        this.color = color;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
     }
 
     /**

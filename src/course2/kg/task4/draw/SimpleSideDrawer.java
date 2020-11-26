@@ -9,8 +9,10 @@ import course2.kg.task4.third.PolyLine3D;
 import java.awt.*;
 import java.util.Comparator;
 import java.util.LinkedList;
+import java.util.Random;
 
 public class SimpleSideDrawer extends ScreenGraphicsDrawer {
+    private static final Random RND = new Random();
 
     public SimpleSideDrawer(ScreenConverter sc, Graphics2D g) {
         super(sc, g);
@@ -25,9 +27,10 @@ public class SimpleSideDrawer extends ScreenGraphicsDrawer {
     protected void oneDraw(PolyLine3D polyline) {
         LinkedList<ScreenPoint> points = new LinkedList<>();
         /*переводим все точки в экранные*/
+        getGraphics().setColor(polyline.getColor());
         for (Vector3 v : polyline.getPoints())
             points.add(getScreenConverter().r2s(v));
-        getGraphics().setColor(Color.BLACK);
+//        getGraphics().setColor(Color.BLACK);
         /*если точек меньше двух, то рисуем отдельными алгоритмами*/
         if (points.size() < 2) {
             if (points.size() > 0)
@@ -36,10 +39,10 @@ public class SimpleSideDrawer extends ScreenGraphicsDrawer {
         }
         /*создаём хранилище этих точек в виде двух массивов*/
         ScreenCoordinates crds = new ScreenCoordinates(points);
-        /*если линия замкнута - рисем полиго, иначе - полилинию*/
-        getGraphics().setColor(new Color(150, 150, 150, 150));
-        if (polyline.isClosed())
+        /*если линия замкнута - рисуем закрашенный полигон, иначе - полилинию*/
+        if (polyline.isClosed()) {
             getGraphics().fillPolygon(crds.getXx(), crds.getYy(), crds.size());
+        }
         else
             getGraphics().drawPolyline(crds.getXx(), crds.getYy(), crds.size());
     }
