@@ -25,6 +25,10 @@ public class Line3D implements IModel {
         this.color = color;
     }
 
+    public Line3D(Vector3 p1, Vector3 p2) {
+        this(p1, p2, Color.BLACK);
+    }
+
     public Color getColor() {
         return color;
     }
@@ -39,5 +43,12 @@ public class Line3D implements IModel {
                 Arrays.asList(p1, p2)
             , false, color));
     }
-    
+
+    public Vector3 getP1() {
+        return p1;
+    }
+
+    public Vector3 getP2() {
+        return p2;
+    }
 }

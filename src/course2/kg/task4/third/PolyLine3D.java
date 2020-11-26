@@ -23,7 +23,7 @@ public class PolyLine3D {
     /**
      * Создаёт новую полилинию на основе трёхмерных точек.
      * @param points список точек-вершин ломанной
-     * @param closed признак замкнутостит линии
+     * @param closed признак замкнутости линии
      */
     public PolyLine3D(Collection<Vector3> points, boolean closed, Color color) {
         this.points = new LinkedList<Vector3>(points);
