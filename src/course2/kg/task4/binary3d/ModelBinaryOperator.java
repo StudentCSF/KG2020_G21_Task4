@@ -22,7 +22,12 @@ public class ModelBinaryOperator {
         return null;
     }
 
-    public static Vector3 intersection(Line3D l1, Line3D l2) {
+    public static boolean isInside(IModel model, Vector3 v) {
+
+        return false;
+    }
+
+    public static Vector3 cutsIntersection(Line3D l1, Line3D l2) {
         Vector3 p11 = l1.getP1();
         Vector3 p12 = l1.getP2();
         Vector3 p21 = l2.getP1();
@@ -67,15 +72,13 @@ public class ModelBinaryOperator {
                 {arr[7] - arr[5], arr[7] - arr[6]}
         };
         float det1 = MathUtils.determinant(m1);
-        if (Math.abs(det) > 1E-12)
-            res[0] = det1 / det;
+        res[0] = det1 / det;
         float[][] m2 = {
                 {arr[0] - arr[1], arr[3] - arr[1]},
                 {arr[4] - arr[5], arr[7] - arr[5]}
         };
         float det2 = MathUtils.determinant(m2);
-        if (Math.abs(det) > 1E-12)
-            res[1] = det2 / det;
+        res[1] = det2 / det;
         return res;
     }
 }

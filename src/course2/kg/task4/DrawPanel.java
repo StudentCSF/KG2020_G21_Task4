@@ -15,6 +15,7 @@ import course2.kg.task4.draw.IDrawer;
 import course2.kg.task4.draw.SimpleEdgeDrawer;
 import course2.kg.task4.draw.SimpleSideDrawer;
 import course2.kg.task4.math.Vector3;
+import course2.kg.task4.models.Sphere;
 import course2.kg.task4.screen.ScreenConverter;
 import course2.kg.task4.third.Camera;
 import course2.kg.task4.third.Scene;
@@ -48,14 +49,18 @@ public class DrawPanel extends JPanel
 //        ));
         Random rnd  = new Random();
         int[] arr = new int[]{-1, 1};
-        scene.getModelsList().add(new Parallelepiped(
-                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
-                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(100, 150, 200, 150)
-        ));
-        scene.getModelsList().add(new Parallelepiped(
-                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
-                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(200, 150, 100, 150)
-        ));
+//        scene.getModelsList().add(new Parallelepiped(
+//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
+//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(100, 150, 200, 150)
+//        ));
+//        scene.getModelsList().add(new Parallelepiped(
+//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
+//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(200, 150, 100, 150)
+//        ));
+//        scene.getModelsList().add(new Sphere(new Vector3(1, 1, 1), 1f));
+        scene.getModelsList().add(new Sphere(new Vector3(-1, 1, 1), 1f));
+//        scene.getModelsList().add(new Sphere(new Vector3(1, -1, 1), 1f));
+//        scene.getModelsList().add(new Sphere(new Vector3(1, 1, -1), 1f));
 
         camController.addRepaintListener(this);
         addMouseListener(camController);

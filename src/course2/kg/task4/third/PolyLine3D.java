@@ -20,6 +20,10 @@ public class PolyLine3D {
     private boolean closed;
     private Color color;
 
+    public PolyLine3D(List<Vector3> points, boolean closed) {
+        this(points, closed, Color.BLACK);
+    }
+
     /**
      * Создаёт новую полилинию на основе трёхмерных точек.
      * @param points список точек-вершин ломанной
