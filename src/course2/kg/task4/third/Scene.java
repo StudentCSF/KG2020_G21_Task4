@@ -57,7 +57,7 @@ public class Scene {
     
     private static final List<Line3D> axes = Arrays.asList(
             new Line3D(new Vector3(0, 0, 0), new Vector3(1, 0, 0), Color.RED),
-            new Line3D(new Vector3(0, 0, 0), new Vector3(0, 1, 0), Color.GREEN),
+            new Line3D(new Vector3(0, 0, 0), new Vector3(0, 1, 0), new Color(50, 205, 50)),
             new Line3D(new Vector3(0, 0, 0), new Vector3(0, 0, 1), Color.BLUE)
     );
     

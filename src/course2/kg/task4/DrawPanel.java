@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import course2.kg.task4.draw.IDrawer;
 import course2.kg.task4.draw.SimpleEdgeDrawer;
 import course2.kg.task4.draw.SimpleSideDrawer;
+import course2.kg.task4.fun.SolarSystem;
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.models.Sphere;
 import course2.kg.task4.screen.ScreenConverter;
@@ -37,6 +38,7 @@ public class DrawPanel extends JPanel
         cam = new Camera();
         camController = new CameraController(cam, sc);
         scene = new Scene(Color.WHITE.getRGB());
+//        scene = new Scene(Color.BLACK.getRGB());
         scene.showAxes();
 
 //        scene.getModelsList().add(new Parallelepiped(
@@ -57,10 +59,11 @@ public class DrawPanel extends JPanel
 //                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
 //                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(200, 150, 100, 150)
 //        ));
-//        scene.getModelsList().add(new Sphere(new Vector3(1, 1, 1), 1f));
+        scene.getModelsList().add(new Sphere(new Vector3(0, 0, 0), 1f, new Color(134, 43, 76)));
+//        scene.getModelsList().addAll(SolarSystem.getSolarSystem());
         scene.getModelsList().add(new Sphere(new Vector3(-1, 1, 1), 1f));
-//        scene.getModelsList().add(new Sphere(new Vector3(1, -1, 1), 1f));
-//        scene.getModelsList().add(new Sphere(new Vector3(1, 1, -1), 1f));
+        scene.getModelsList().add(new Sphere(new Vector3(1, -1, 1), 1f));
+        scene.getModelsList().add(new Sphere(new Vector3(1, 1, -1), 1f));
 
         camController.addRepaintListener(this);
         addMouseListener(camController);

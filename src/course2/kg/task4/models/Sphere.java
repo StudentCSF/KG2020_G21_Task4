@@ -5,10 +5,8 @@ import course2.kg.task4.third.IModel;
 import course2.kg.task4.third.PolyLine3D;
 
 import java.awt.*;
-import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
-import java.util.Queue;
 
 public class Sphere implements IModel {
     private Vector3 center;
@@ -38,34 +36,29 @@ public class Sphere implements IModel {
     public List<PolyLine3D> getLines() {
         List<PolyLine3D> res = new LinkedList<>();
         float step = (float) Math.PI / 10;
-        float d = 2 * r;
+        List<Vector3> l = null;
+        List<Vector3> l2 = null;
         for (float alpha = 0; alpha <= 2 * Math.PI; alpha += step) {
             float sinA = (float) Math.sin(alpha);
-            PolyLine3D p1 = new PolyLine3D(new LinkedList<>(), false);
-            PolyLine3D p2 = new PolyLine3D(new LinkedList<>(), false);
+            List<Vector3> main = new ArrayList<>();
+            List<Vector3> main2 = new ArrayList<>();
             for (float beta = 0; beta <= 2 * Math.PI; beta += step) {
                 float sinB = (float) Math.sin(beta);
                 float x = center.getX() + r * sinA * (float) Math.sqrt(1 - sinB * sinB);
                 float y = center.getY() + r * sinA * sinB;
-                float z = center.getZ() + r * (float) Math.sqrt(1 - sinA * sinA);
-                p1.getPoints().add(new Vector3(x, y, z));
-                float z2 = center.getZ() > 0 ? d - z : -d - z;
-                p2.getPoints().add(new Vector3(x, y, z2));
+                float cosA = (float) Math.sqrt(1 - sinA * sinA);
+                float z = center.getZ() + r * cosA;
+                main.add(new Vector3(x, y, z));
+                float z2 = center.getZ() - r * cosA;
+                main2.add(new Vector3(x, y, z2));
             }
-            res.add(p1);
-            res.add(p2);
-        }
-        for (int i = 0; i < res.get(0).getPoints().size(); i++) {
-            PolyLine3D p1 = new PolyLine3D(new LinkedList<>(), false);
-            PolyLine3D p2 = new PolyLine3D(new LinkedList<>(), false);
-            int k = 0;
-            for (PolyLine3D curr : res) {
-                if (k % 2 == 0) p1.getPoints().add(curr.getPoints().get(i));
-                else p2.getPoints().add(curr.getPoints().get(i));
-                k++;
-            }
-            res.add(p1);
-            res.add(p2);
+            if (l != null)
+                for (int k = 0; k < main.size() - 1; k++) {
+                    res.add(new PolyLine3D(Arrays.asList(l.get(k), l.get(k + 1), main.get(k + 1), main.get(k)), true, color));
+                    res.add(new PolyLine3D(Arrays.asList(l2.get(k), l2.get(k + 1), main2.get(k + 1), main2.get(k)), true, color));
+                }
+            l = main;
+            l2 = main2;
         }
         return res;
     }
