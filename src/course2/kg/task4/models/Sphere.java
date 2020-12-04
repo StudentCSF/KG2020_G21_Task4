@@ -2,6 +2,7 @@ package course2.kg.task4.models;
 
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.third.IModel;
+import course2.kg.task4.third.Mesh;
 import course2.kg.task4.third.PolyLine3D;
 
 import java.awt.*;
@@ -33,16 +34,17 @@ public class Sphere implements IModel {
 
 
     @Override
-    public List<PolyLine3D> getLines() {
+    public Mesh getMesh() {
         List<PolyLine3D> res = new LinkedList<>();
         float step = (float) Math.PI / 10;
         List<Vector3> l = null;
         List<Vector3> l2 = null;
-        for (float alpha = 0; alpha <= 2 * Math.PI; alpha += step) {
+        float eps = step / 1000;
+        for (float alpha = 0; alpha <= 2 * Math.PI + eps; alpha += step) {
             float sinA = (float) Math.sin(alpha);
             List<Vector3> main = new ArrayList<>();
             List<Vector3> main2 = new ArrayList<>();
-            for (float beta = 0; beta <= 2 * Math.PI; beta += step) {
+            for (float beta = 0; beta <= 2 * Math.PI + eps; beta += step) {
                 float sinB = (float) Math.sin(beta);
                 float x = center.getX() + r * sinA * (float) Math.sqrt(1 - sinB * sinB);
                 float y = center.getY() + r * sinA * sinB;
@@ -60,6 +62,6 @@ public class Sphere implements IModel {
             l = main;
             l2 = main2;
         }
-        return res;
+        return new Mesh(res, null);
     }
 }

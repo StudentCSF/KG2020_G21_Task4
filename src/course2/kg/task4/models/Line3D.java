@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.third.IModel;
+import course2.kg.task4.third.Mesh;
 import course2.kg.task4.third.PolyLine3D;
 
 /**
@@ -38,10 +39,10 @@ public class Line3D implements IModel {
     }
 
     @Override
-    public List<PolyLine3D> getLines() {
-        return Arrays.asList(new PolyLine3D(
+    public Mesh getMesh() {
+        return new Mesh(Arrays.asList(new PolyLine3D(
                 Arrays.asList(p1, p2)
-            , false, color));
+            , false, color)), Arrays.asList(p1, p2));
     }
 
     public Vector3 getP1() {

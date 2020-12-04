@@ -15,5 +15,5 @@ public interface IModel {
      * Любая модель - это набор полилиний.
      * @return Списко полилиний модели.
      */
-    List<PolyLine3D> getLines();
+    Mesh getMesh();
 }

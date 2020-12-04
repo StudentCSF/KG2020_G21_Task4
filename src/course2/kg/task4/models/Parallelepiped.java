@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.third.IModel;
+import course2.kg.task4.third.Mesh;
 import course2.kg.task4.third.PolyLine3D;
 
 /**
@@ -40,41 +41,60 @@ public class Parallelepiped implements IModel {
     }
 
     @Override
-    public List<PolyLine3D> getLines() {
-        LinkedList<PolyLine3D> lines = new LinkedList<>();
-        /*Дальняя сторона (Z фиксирован и вязт у LTF)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(LTF.getX(), LTF.getY(), LTF.getZ()),
+    public Mesh getMesh() {
+        List<PolyLine3D> lines = new LinkedList<>();
+        List<Vector3> vertexes = Arrays.asList(
+                new Vector3(LTF.getX(), LTF.getY(), LTF.getZ()),
                 new Vector3(LTF.getX(), RBN.getY(), LTF.getZ()),
                 new Vector3(RBN.getX(), RBN.getY(), LTF.getZ()),
-                new Vector3(RBN.getX(), LTF.getY(), LTF.getZ())), true, color));
-        /*Ближняя сторона  (Z фиксирован и вязт у RBN)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(LTF.getX(), LTF.getY(), RBN.getZ()),
+                new Vector3(RBN.getX(), LTF.getY(), LTF.getZ()),
+                new Vector3(LTF.getX(), LTF.getY(), RBN.getZ()),
                 new Vector3(LTF.getX(), RBN.getY(), RBN.getZ()),
                 new Vector3(RBN.getX(), RBN.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), LTF.getY(), RBN.getZ())), true, color));
+                new Vector3(RBN.getX(), LTF.getY(), RBN.getZ())
+        );
+        /*Дальняя сторона (Z фиксирован и вязт у LTF)*/
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(0),
+                vertexes.get(1),
+                vertexes.get(2),
+                vertexes.get(3)
+                ), true, color));
+        /*Ближняя сторона  (Z фиксирован и вязт у RBN)*/
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(4),
+                vertexes.get(5),
+                vertexes.get(6),
+                vertexes.get(7)
+        ), true, color));
         
         /*Верхняя сторона (Y фиксирован и вязт у LTF)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(LTF.getX(), LTF.getY(), LTF.getZ()),
-                new Vector3(LTF.getX(), LTF.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), LTF.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), LTF.getY(), LTF.getZ())), true, color));
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(0),
+                vertexes.get(4),
+                vertexes.get(7),
+                vertexes.get(3)
+        ), true, color));
         /*Нижняя сторона (Y фиксирован и вязт у RBN)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(LTF.getX(), RBN.getY(), LTF.getZ()),
-                new Vector3(LTF.getX(), RBN.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), RBN.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), RBN.getY(), LTF.getZ())), true, color));
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(1),
+                vertexes.get(5),
+                vertexes.get(6),
+                vertexes.get(2)), true, color));
         
         /*Левая сторона (X фиксирован и вязт у LTF)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(LTF.getX(), LTF.getY(), LTF.getZ()),
-                new Vector3(LTF.getX(), LTF.getY(), RBN.getZ()),
-                new Vector3(LTF.getX(), RBN.getY(), RBN.getZ()),
-                new Vector3(LTF.getX(), RBN.getY(), LTF.getZ())), true, color));
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(0),
+                vertexes.get(4),
+                vertexes.get(5),
+                vertexes.get(1)), true, color));
         /*Правая сторона (X фиксирован и вязт у RBN)*/
-        lines.add(new PolyLine3D(Arrays.asList(new Vector3(RBN.getX(), LTF.getY(), LTF.getZ()),
-                new Vector3(RBN.getX(), LTF.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), RBN.getY(), RBN.getZ()),
-                new Vector3(RBN.getX(), RBN.getY(), LTF.getZ())), true, color));
+        lines.add(new PolyLine3D(Arrays.asList(
+                vertexes.get(3),
+                vertexes.get(7),
+                vertexes.get(6),
+                vertexes.get(2)), true, color));
         
-        return lines;
+        return new Mesh(lines, vertexes);
     }
 }

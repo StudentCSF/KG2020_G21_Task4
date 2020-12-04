@@ -6,19 +6,21 @@ import course2.kg.task4.third.IModel;
 import course2.kg.task4.third.PolyLine3D;
 import course2.kg.task4.utils.MathUtils;
 
+import java.util.List;
+
 
 public class ModelBinaryOperator {
 
-    public static PolyLine3D union(IModel m1, IModel m2) {
+    public static List<PolyLine3D> union(IModel m1, IModel m2) {
 
         return null;
     }
 
-    public static PolyLine3D subtraction(IModel from, IModel that) {
+    public static List<PolyLine3D> subtraction(IModel from, IModel that) {
         return null;
     }
 
-    public static PolyLine3D intersection(IModel m1, IModel m2) {
+    public static List<PolyLine3D> intersection(IModel m1, IModel m2) {
         return null;
     }
 

@@ -21,6 +21,10 @@ public class Vector3 {
         values = new float[]{x, y, z};
     }
 
+    public Vector3(Vector3 v) {
+        this(v.getX(), v.getY(), v.getZ());
+    }
+
     /**
      * X-составляющая вектора
      * @return X-составляющая вектора

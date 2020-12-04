@@ -76,13 +76,13 @@ public class Scene {
         /*перебираем все полилинии во всех моделях*/
         for (Collection<? extends IModel> mc : allModels)
             for (IModel m : mc) {
-                for (PolyLine3D pl : m.getLines()) {
+                for (PolyLine3D pl : m.getMesh().getPolygons()) {
                     /*Все точки конвертируем с помощью камеры*/
                     List<Vector3> points = new LinkedList<>();
                     for (Vector3 v : pl.getPoints()) {
                         points.add(cam.w2s(v));
                     }
-                    /*Создаём на их сонове новые полилинии, но в том виде, в котором их видит камера*/
+                    /*Создаём на их основе новые полилинии, но в том виде, в котором их видит камера*/
                     lines.add(new PolyLine3D(points, pl.isClosed(), pl.getColor()));
                 }
             }
