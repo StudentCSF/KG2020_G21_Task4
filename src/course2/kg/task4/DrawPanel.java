@@ -55,15 +55,15 @@ public class DrawPanel extends JPanel
 //                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
 //                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(100, 150, 200, 150)
 //        ));
-//        scene.getModelsList().add(new Parallelepiped(
-//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
-//                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(200, 150, 100, 150)
-//        ));
-        scene.getModelsList().add(new Sphere(new Vector3(0, 0, 0), 1f, new Color(134, 43, 76)));
+        scene.getModelsList().add(new Parallelepiped(
+                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]),
+                new Vector3(rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)], rnd.nextFloat() * arr[rnd.nextInt(2)]), new Color(200, 150, 100, 150)
+        ));
+        scene.getModelsList().add(new Sphere(new Vector3(0, 0, 0), 1f, new Color(134, 43, 76, 20)));
 //        scene.getModelsList().addAll(SolarSystem.getSolarSystem());
-        scene.getModelsList().add(new Sphere(new Vector3(-1, 1, 1), 1f));
-        scene.getModelsList().add(new Sphere(new Vector3(1, -1, 1), 1f));
-        scene.getModelsList().add(new Sphere(new Vector3(1, 1, -1), 1f));
+//        scene.getModelsList().add(new Sphere(new Vector3(-1, 1, 1), 1f));
+//        scene.getModelsList().add(new Sphere(new Vector3(1, -1, 1), 1f));
+//        scene.getModelsList().add(new Sphere(new Vector3(1, 1, -1), 1f));
 
         camController.addRepaintListener(this);
         addMouseListener(camController);
