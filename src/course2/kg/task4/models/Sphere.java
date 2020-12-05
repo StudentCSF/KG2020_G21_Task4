@@ -36,15 +36,15 @@ public class Sphere implements IModel {
     @Override
     public Mesh getMesh() {
         List<PolyLine3D> res = new LinkedList<>();
-        float step = (float) Math.PI / 10;
+        float step = (float) Math.PI / 24;
         List<Vector3> l = null;
         List<Vector3> l2 = null;
         float eps = step / 1000;
-        for (float alpha = 0; alpha <= 2 * Math.PI + eps; alpha += step) {
+        for (float alpha = -0.5f * (float)Math.PI; alpha <= 0.5f * Math.PI + eps; alpha += step) {
             float sinA = (float) Math.sin(alpha);
             List<Vector3> main = new ArrayList<>();
             List<Vector3> main2 = new ArrayList<>();
-            for (float beta = 0; beta <= 2 * Math.PI + eps; beta += step) {
+            for (float beta = -0.5f * (float)Math.PI; beta <= 0.5f * Math.PI + eps; beta += step) {
                 float sinB = (float) Math.sin(beta);
                 float x = center.getX() + r * sinA * (float) Math.sqrt(1 - sinB * sinB);
                 float y = center.getY() + r * sinA * sinB;
@@ -62,6 +62,6 @@ public class Sphere implements IModel {
             l = main;
             l2 = main2;
         }
-        return new Mesh(res, null);
+        return new Mesh(res, null, null);
     }
 }
