@@ -31,40 +31,143 @@ public class ModelBinaryOperator {
     }
 
     public static IModel union(IModel m1, IModel m2) {
-        return null;
+        PartitionModel model = getPartitionModel(m1, m2);
+        List<PolyLine3D> list = new LinkedList<>();
+        list.addAll(model.getOm1());
+        list.addAll(model.getOm2());
+        return new CustomModel(list);
     }
 
     public static IModel subtraction(IModel from, IModel that) {
-        return null;
+        PartitionModel model = getPartitionModel(from, that);
+        List<PolyLine3D> list = new LinkedList<>();
+        list.addAll(model.getOm1());
+//        list.addAll(model.im2);
+        return new CustomModel(list);
     }
 
     public static IModel intersection(IModel m1, IModel m2) {
-        return null;
+        PartitionModel model = getPartitionModel(m1, m2);
+        List<PolyLine3D> list = new LinkedList<>();
+        list.addAll(model.getIm1());
+        list.addAll(model.getIm2());
+        return new CustomModel(list);
     }
 
-    private static PartitionModel getPolyLines(IModel m1, IModel m2) {
+    private static PartitionModel getPartitionModel(IModel m1, IModel m2) {
         List<PolyLine3D> o1 = new LinkedList<>();
         List<PolyLine3D> i1 = new LinkedList<>();
         List<PolyLine3D> o2 = new LinkedList<>();
         List<PolyLine3D> i2 = new LinkedList<>();
+//        List<PolyLine3D> buf1 = new LinkedList<>();
+//        List<PolyLine3D> buf2 = new LinkedList<>();
+        Map<PolyLine3D, Set<Vector3>> buf1 = new HashMap<>();
+        Map<PolyLine3D, Set<Vector3>> buf2 = new HashMap<>();
+        boolean flag;
         for (PolyLine3D p : m1.getMesh().getPolygons()) {
-            for (PolyLine3D p2 : m2.getMesh().getPolygons()) {
-
+//            flag = true;
+            Set<Vector3> curr = new HashSet<>();
+            for (Vector3 v : p.getPoints()) {
+                if (isInside(m2, v)) {
+//                    flag = false;
+//                    buf1.add(p);
+                    curr.add(v);
+                }
+            }
+            if (curr.size() == 0) o1.add(p);
+            else if (curr.size() == p.getPoints().size()) i1.add(p);
+            else buf1.put(p, curr);
+        }
+        for (PolyLine3D p : m2.getMesh().getPolygons()) {
+//            flag = true;
+            Set<Vector3> curr = new HashSet<>();
+            for (Vector3 v : p.getPoints()) {
+                if (isInside(m1, v)) {
+                    curr.add(v);
+//                    flag = false;
+//                    buf2.add(p);
+//                    inners2.add(v);
+                }
+            }
+            if (curr.size() == 0) o2.add(p);
+            else if (curr.size() == p.getPoints().size()) i2.add(p);
+            else buf2.put(p, curr);
+        }
+        for (Map.Entry<PolyLine3D, Set<Vector3>> kv : buf1.entrySet()) {
+            for (PolyLine3D pol : m2.getMesh().getPolygons()) {
+                Line3D line = intersection(kv.getKey(), pol);
+                if (line != null) {
+                    List<Vector3> list = new LinkedList<>(kv.getValue());
+                    list.add(line.getP1());
+                    list.add(line.getP2());
+                    i1.add(new PolyLine3D(list, true));
+                    list = new ArrayList<>();
+                    list.add(line.getP1());
+                    list.add(line.getP2());
+                    for (Vector3 vc : kv.getKey().getPoints()) {
+                        if (!kv.getValue().contains(vc)) list.add(vc);
+                    }
+                    o1.add(new PolyLine3D(list, true));
+                }
             }
         }
-        return null;
+
+        for (Map.Entry<PolyLine3D, Set<Vector3>> kv : buf2.entrySet()) {
+            for (PolyLine3D pol : m1.getMesh().getPolygons()) {
+                Line3D line = intersection(kv.getKey(), pol);
+                if (line != null) {
+                    List<Vector3> list = new LinkedList<>(kv.getValue());
+                    list.add(line.getP1());
+                    list.add(line.getP2());
+                    i2.add(new PolyLine3D(list, true));
+                    list = new ArrayList<>();
+                    list.add(line.getP1());
+                    list.add(line.getP2());
+                    for (Vector3 vc : kv.getKey().getPoints()) {
+                        if (!kv.getValue().contains(vc)) list.add(vc);
+                    }
+                    o2.add(new PolyLine3D(list, true));
+                }
+            }
+        }
+        return new PartitionModel(o1, o2, i1, i2);
     }
 
     public static Line3D intersection(PolyLine3D p1, PolyLine3D p2) {
         List<Vector3> lp1 = p1.getPoints();
-        float[][] bas = new float[][]{
+        /*float[][] bas = new float[][]{
                 {lp1.get(0).getX(), lp1.get(0).getY(), lp1.get(0).getZ()},
                 {lp1.get(1).getX() - lp1.get(0).getX(), lp1.get(1).getY() - lp1.get(0).getY(), lp1.get(1).getZ() - lp1.get(0).getZ()},
                 {lp1.get(2).getX() - lp1.get(0).getX(), lp1.get(2).getY() - lp1.get(0).getY(), lp1.get(2).getZ() - lp1.get(0).getZ()}
         };
         for (Vector3 curr : p2.getPoints()) {
 //            System.out.println(2);
+        }*/
+        List<Line3D> lines = new ArrayList<>();
+        int i = 1;
+        for (; i < lp1.size(); i++) {
+            lines.add(new Line3D(lp1.get(i), lp1.get(i - 1)));
         }
+        lines.add(new Line3D(lp1.get(0), lp1.get(i - 1)));
+        List<Vector3> inters = new ArrayList<>();
+        for (Line3D l : lines) {
+            Vector3 v = intersection(p2, l);
+            if (v != null) inters.add(v);
+        }
+
+        List<Vector3> lp2 = p1.getPoints();
+        lines = new ArrayList<>();
+        i = 1;
+        for (; i < lp2.size(); i++) {
+            lines.add(new Line3D(lp2.get(i), lp2.get(i - 1)));
+        }
+        lines.add(new Line3D(lp2.get(0), lp2.get(i - 1)));
+//        List<Vector3> inters = new ArrayList<>();
+        for (Line3D l : lines) {
+            Vector3 v = intersection(p1, l);
+            if (v != null) inters.add(v);
+        }
+        if (inters.size() == 2) return new Line3D(inters.get(0), inters.get(1));
         return null;
     }
 
@@ -217,7 +320,7 @@ public class ModelBinaryOperator {
             }
 //            counter++;
         }
-        System.out.println(inters.size());
+//        System.out.println(inters.size());
         return inters.size() % 2 == 1;
     }
 
@@ -263,17 +366,17 @@ public class ModelBinaryOperator {
                 {v1.getX() - v0.getX(), v1.getY() - v0.getY(), v1.getZ() - v0.getZ()},
                 {v2.getX() - v0.getX(), v2.getY() - v0.getY(), v2.getZ() - v0.getZ()}
         })) > 1E-6f) return false;
-        float a = (float)Math.sqrt(Math.pow(v0.getX() - v1.getX(), 2) + Math.pow(v0.getY() - v1.getY(), 2) + Math.pow(v0.getZ() - v1.getZ(), 2));
-        float b = (float)Math.sqrt(Math.pow(v2.getX() - v1.getX(), 2) + Math.pow(v2.getY() - v1.getY(), 2) + Math.pow(v2.getZ() - v1.getZ(), 2));
-        float c = (float)Math.sqrt(Math.pow(v2.getX() - v3.getX(), 2) + Math.pow(v2.getY() - v3.getY(), 2) + Math.pow(v2.getZ() - v3.getZ(), 2));
-        float d = (float)Math.sqrt(Math.pow(v0.getX() - v3.getX(), 2) + Math.pow(v0.getY() - v3.getY(), 2) + Math.pow(v0.getZ() - v3.getZ(), 2));
+        float a = (float) Math.sqrt(Math.pow(v0.getX() - v1.getX(), 2) + Math.pow(v0.getY() - v1.getY(), 2) + Math.pow(v0.getZ() - v1.getZ(), 2));
+        float b = (float) Math.sqrt(Math.pow(v2.getX() - v1.getX(), 2) + Math.pow(v2.getY() - v1.getY(), 2) + Math.pow(v2.getZ() - v1.getZ(), 2));
+        float c = (float) Math.sqrt(Math.pow(v2.getX() - v3.getX(), 2) + Math.pow(v2.getY() - v3.getY(), 2) + Math.pow(v2.getZ() - v3.getZ(), 2));
+        float d = (float) Math.sqrt(Math.pow(v0.getX() - v3.getX(), 2) + Math.pow(v0.getY() - v3.getY(), 2) + Math.pow(v0.getZ() - v3.getZ(), 2));
         float s0 = square(new float[]{a, b, c, d});
-        float a1 = (float)Math.sqrt(Math.pow(v0.getX() - v.getX(), 2) + Math.pow(v0.getY() - v.getY(), 2) + Math.pow(v0.getZ() - v.getZ(), 2));
-        float a2 = (float)Math.sqrt(Math.pow(v1.getX() - v.getX(), 2) + Math.pow(v1.getY() - v.getY(), 2) + Math.pow(v1.getZ() - v.getZ(), 2));
+        float a1 = (float) Math.sqrt(Math.pow(v0.getX() - v.getX(), 2) + Math.pow(v0.getY() - v.getY(), 2) + Math.pow(v0.getZ() - v.getZ(), 2));
+        float a2 = (float) Math.sqrt(Math.pow(v1.getX() - v.getX(), 2) + Math.pow(v1.getY() - v.getY(), 2) + Math.pow(v1.getZ() - v.getZ(), 2));
         float s1 = square(new float[]{0, a, a1, a2});
-        float b1 = (float)Math.sqrt(Math.pow(v2.getX() - v.getX(), 2) + Math.pow(v2.getY() - v.getY(), 2) + Math.pow(v2.getZ() - v.getZ(), 2));
+        float b1 = (float) Math.sqrt(Math.pow(v2.getX() - v.getX(), 2) + Math.pow(v2.getY() - v.getY(), 2) + Math.pow(v2.getZ() - v.getZ(), 2));
         float s2 = square(new float[]{0, a2, b, b1});
-        float c1 = (float)Math.sqrt(Math.pow(v3.getX() - v.getX(), 2) + Math.pow(v3.getY() - v.getY(), 2) + Math.pow(v3.getZ() - v.getZ(), 2));
+        float c1 = (float) Math.sqrt(Math.pow(v3.getX() - v.getX(), 2) + Math.pow(v3.getY() - v.getY(), 2) + Math.pow(v3.getZ() - v.getZ(), 2));
         float s3 = square(new float[]{0, b1, c, c1});
         float s4 = square(new float[]{0, c1, d, a1});
 //        System.out.println(Math.abs(s0 - s1 - s2 - s3 - s4));
@@ -286,7 +389,7 @@ public class ModelBinaryOperator {
         p /= 2;
         float sqr = 1;
         for (float curr : arr) sqr *= p - curr;
-        return (float)Math.sqrt(sqr);
+        return (float) Math.sqrt(sqr);
     }
 
     public static Vector3 projection(PolyLine3D p, Vector3 v) {
@@ -302,7 +405,7 @@ public class ModelBinaryOperator {
         };
 //        for (float[] c : m) System.out.println(Arrays.toString(c));
 
-            float det = MathUtils.determinant(m);
+        float det = MathUtils.determinant(m);
         float[][] m1 = {
                 {arr[3] - arr[1], arr[3] - arr[2]},
                 {arr[7] - arr[5], arr[7] - arr[6]}
