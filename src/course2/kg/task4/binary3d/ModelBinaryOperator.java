@@ -181,7 +181,7 @@ public class ModelBinaryOperator {
 //            System.out.println("uv " + uv[0] + " " + uv[1]);
 //            System.out.println(p12.getY());
 //            System.out.println(Arrays.toString(uv));
-            if (uv != null && uv[0] <= 1 && uv[1] <= 1 && uv[0] >= 0 && uv[1] >= 0) {
+            if (uv != null && uv[0] < 1 && uv[1] < 1 && uv[0] > 0 && uv[1] > 0) {
 //                System.out.println("gr");
                 return new Vector3(
                         uv[0] * (p11.getX() - p12.getX()) + p12.getX(),
