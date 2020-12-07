@@ -71,5 +71,4 @@ public class PolyLine3D {
             sum += v.getZ();
         return sum / points.size();
     }
-    
 }

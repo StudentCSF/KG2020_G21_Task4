@@ -32,6 +32,10 @@ public class Parallelepiped implements IModel {
         this.color = color;
     }
 
+    public Parallelepiped(Vector3 LTF, Vector3 RBN) {
+        this(LTF, RBN, Color.BLACK);
+    }
+
     public Color getColor() {
         return color;
     }
@@ -95,6 +99,19 @@ public class Parallelepiped implements IModel {
                 vertexes.get(6),
                 vertexes.get(2)), true, color));
         
-        return new Mesh(lines, vertexes);
+        return new Mesh(lines, vertexes, Arrays.asList(
+                new Line3D(vertexes.get(0), vertexes.get(1)),
+                new Line3D(vertexes.get(1), vertexes.get(2)),
+                new Line3D(vertexes.get(2), vertexes.get(3)),
+                new Line3D(vertexes.get(0), vertexes.get(3)),
+                new Line3D(vertexes.get(4), vertexes.get(5)),
+                new Line3D(vertexes.get(5), vertexes.get(5)),
+                new Line3D(vertexes.get(6), vertexes.get(7)),
+                new Line3D(vertexes.get(7), vertexes.get(4)),
+                new Line3D(vertexes.get(0), vertexes.get(4)),
+                new Line3D(vertexes.get(1), vertexes.get(5)),
+                new Line3D(vertexes.get(2), vertexes.get(6)),
+                new Line3D(vertexes.get(3), vertexes.get(7))
+        ));
     }
 }

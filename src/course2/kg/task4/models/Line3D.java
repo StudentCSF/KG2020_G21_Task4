@@ -6,7 +6,7 @@ package course2.kg.task4.models;
 
 import java.awt.*;
 import java.util.Arrays;
-import java.util.List;
+
 import course2.kg.task4.math.Vector3;
 import course2.kg.task4.third.IModel;
 import course2.kg.task4.third.Mesh;
@@ -42,7 +42,7 @@ public class Line3D implements IModel {
     public Mesh getMesh() {
         return new Mesh(Arrays.asList(new PolyLine3D(
                 Arrays.asList(p1, p2)
-            , false, color)), Arrays.asList(p1, p2));
+            , false, color)), Arrays.asList(p1, p2), Arrays.asList(this));
     }
 
     public Vector3 getP1() {

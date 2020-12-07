@@ -36,7 +36,7 @@ public class Sphere implements IModel {
     @Override
     public Mesh getMesh() {
         List<PolyLine3D> res = new LinkedList<>();
-        float step = (float) Math.PI / 24;
+        float step = (float) Math.PI / 12;
         List<Vector3> l = null;
         List<Vector3> l2 = null;
         float eps = step / 1000;

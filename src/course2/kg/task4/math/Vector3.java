@@ -69,5 +69,17 @@ public class Vector3 {
             return 0;
         return (float)Math.sqrt(lenSqr);
     }
-    
+
+    @Override
+    public int hashCode() {
+        return (this.getX() + "," + this.getY() + ","+ this.getZ()).hashCode();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Vector3)) return false;
+        Vector3 v = (Vector3) obj;
+        float eps = 1E-6f;
+        return Math.abs(v.getX() - this.getX()) < eps && Math.abs(v.getY() - this.getY()) < eps && Math.abs(v.getZ() - this.getZ()) < eps;
+    }
 }

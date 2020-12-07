@@ -392,10 +392,6 @@ public class ModelBinaryOperator {
         return (float) Math.sqrt(sqr);
     }
 
-    public static Vector3 projection(PolyLine3D p, Vector3 v) {
-        return null;
-    }
-
     private static float[] getUV(float[] arr) {
 //        System.out.println(Arrays.toString(arr));
         float[] res = new float[2];
