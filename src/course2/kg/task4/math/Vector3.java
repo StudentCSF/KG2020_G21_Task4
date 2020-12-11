@@ -25,6 +25,10 @@ public class Vector3 {
         this(v.getX(), v.getY(), v.getZ());
     }
 
+    private Vector3(float[] values) {
+        this.values = values;
+    }
+
     /**
      * X-составляющая вектора
      * @return X-составляющая вектора
@@ -70,16 +74,34 @@ public class Vector3 {
         return (float)Math.sqrt(lenSqr);
     }
 
-    @Override
-    public int hashCode() {
-        return (this.getX() + "," + this.getY() + ","+ this.getZ()).hashCode();
+    public Vector3 add(Vector3 other) {
+        if (other == null) return this;
+        float[] res = new float[3];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = at(i) + other.at(i);
+        }
+        return new Vector3(res);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Vector3)) return false;
-        Vector3 v = (Vector3) obj;
-        float eps = 1E-6f;
-        return Math.abs(v.getX() - this.getX()) < eps && Math.abs(v.getY() - this.getY()) < eps && Math.abs(v.getZ() - this.getZ()) < eps;
+    public Vector3 mult(float k) {
+        if (Math.abs(k) < EPSILON) return new Vector3(0, 0, 0);
+        float[] res = new float[3];
+        for (int i = 0; i < res.length; i++) {
+            res[i] = at(i) * k;
+        }
+        return new Vector3(res);
     }
+
+//    @Override
+//    public int hashCode() {
+//        return (this.getX() + "," + this.getY() + ","+ this.getZ()).hashCode();
+//    }
+//
+//    @Override
+//    public boolean equals(Object obj) {
+//        if (!(obj instanceof Vector3)) return false;
+//        Vector3 v = (Vector3) obj;
+//        float eps = 1E-6f;
+//        return Math.abs(v.getX() - this.getX()) < eps && Math.abs(v.getY() - this.getY()) < eps && Math.abs(v.getZ() - this.getZ()) < eps;
+//    }
 }
