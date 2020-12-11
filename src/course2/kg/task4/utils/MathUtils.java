@@ -4,6 +4,16 @@ package course2.kg.task4.utils;
 
 public class MathUtils {
 
+    public static float square(float[] arr) {
+        if (arr.length == 3) arr = new float[] {0, arr[0], arr[1], arr[2]};
+        float p = 0;
+        for (float curr : arr) p += curr;
+        p /= 2;
+        float sqr = 1;
+        for (float curr : arr) sqr *= p - curr;
+        return (float) Math.sqrt(sqr);
+    }
+
     public static float determinant(float[][] matrix) {
         return countDet(matrix);
     }
