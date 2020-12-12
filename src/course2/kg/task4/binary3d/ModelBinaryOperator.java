@@ -6,7 +6,6 @@ import course2.kg.task4.third.IModel;
 import course2.kg.task4.third.Mesh;
 import course2.kg.task4.third.PolyLine3D;
 import course2.kg.task4.utils.MathUtils;
-import org.apache.commons.collections4.keyvalue.DefaultKeyValue;
 
 import java.util.*;
 
@@ -32,7 +31,8 @@ public class ModelBinaryOperator {
     }
 
     public static IModel union(IModel m1, IModel m2) {
-        PartitionModel model = getPartitionModel(m1, m2);
+//        PartitionModel model = getPartitionModel(m1, m2);
+        PartitionModel model = partitionModel(m1, m2);
         List<PolyLine3D> list = new LinkedList<>();
         list.addAll(model.getOm1());
         list.addAll(model.getOm2());
@@ -40,14 +40,16 @@ public class ModelBinaryOperator {
     }
 
     public static IModel subtraction(IModel from, IModel that) {
-        PartitionModel model = getPartitionModel(from, that);
+//        PartitionModel model = getPartitionModel(from, that);
+        PartitionModel model = partitionModel(from, that);
         List<PolyLine3D> list = new LinkedList<>(model.getOm1());
 //        list.addAll(model.getIm2());
         return new CustomModel(list);
     }
 
     public static IModel intersection(IModel m1, IModel m2) {
-        PartitionModel model = getPartitionModel(m1, m2);
+//        PartitionModel model = getPartitionModel(m1, m2);
+        PartitionModel model = partitionModel(m1, m2);
         List<PolyLine3D> list = new LinkedList<>();
         list.addAll(model.getIm1());
         list.addAll(model.getIm2());
@@ -55,7 +57,8 @@ public class ModelBinaryOperator {
     }
 
     public static IModel test(IModel m1, IModel m2) {
-        PartitionModel model = getPartitionModel(m1, m2);
+//        PartitionModel model = getPartitionModel(m1, m2);
+        PartitionModel model = partitionModel(m1, m2);
         List<PolyLine3D> list = new LinkedList<>();
         list.addAll(model.getIm1());
         list.addAll(model.getIm2());
@@ -69,6 +72,8 @@ public class ModelBinaryOperator {
         List<PolyLine3D> i1 = new LinkedList<>();
         List<PolyLine3D> o2 = new LinkedList<>();
         List<PolyLine3D> i2 = new LinkedList<>();
+
+
 
         Map<PolyLine3D, Set<Vector3>> buf1 = new HashMap<>();
         Map<PolyLine3D, Set<Vector3>> buf2 = new HashMap<>();
@@ -144,14 +149,50 @@ public class ModelBinaryOperator {
         List<PolyLine3D> o2 = new LinkedList<>();
         List<PolyLine3D> i2 = new LinkedList<>();
 
-        for (PolyLine3D p : m1.getMesh().getPolygons()) separate(o1, i1, m2, p);
-        for (PolyLine3D p : m2.getMesh().getPolygons()) separate(o2, i2, m1, p);
+        List<PolyLine3D> poly1 = m1.getMesh().getPolygons();
+        List<PolyLine3D> poly2 = m2.getMesh().getPolygons();
+
+        for (PolyLine3D p : poly1) separate(o1, i1, poly2, p);
+        for (PolyLine3D p : poly2) separate(o2, i2, poly1, p);
 
         return new PartitionModel(o1, o2, i1, i2);
     }
 
-    private static void separate(List<PolyLine3D> o, List<PolyLine3D> i, IModel m, PolyLine3D p) {
+    private static void separate(List<PolyLine3D> o, List<PolyLine3D> i, List<PolyLine3D> lp, PolyLine3D p) {
+        List<Vector3> outers = new ArrayList<>();
+        List<Vector3> inners = new ArrayList<>();
+        List<Vector3> inters = new ArrayList<>();
+        for (Vector3 v : p.getPoints()) {
+            if (isInside(lp, v)) inners.add(v);
+            else outers.add(v);
+        }
+        if (inners.size() == p.getPoints().size()) {
+            i.add(p);
+            return;
+        }
+        for (PolyLine3D curr : lp) {
+//            separate(o, i, curr, p);
+            Line3D l = intersection(curr, p);
+            if (l != null) {
+                inters.add(l.getP1());
+                inters.add(l.getP2());
+            }
+        }
+        ArrayList<Vector3> list = new ArrayList<>(inners);
+        list.addAll(inters);
+        if (list.size() > 0) i.add(new PolyLine3D(sort(list), true, p.getColor()));
+        else {
+            o.add(p);
+            return;
+        }
+        list = new ArrayList<>(outers);
+        list.addAll(inters);
+        o.add(new PolyLine3D(sort(list), true, p.getColor()));
     }
+
+//    private static void separate(List<PolyLine3D> o, List<PolyLine3D> i, PolyLine3D tmp, PolyLine3D src) {
+//
+//    }
 
     public static PolyLine3D intersection(IModel m, PolyLine3D p) {
         for (PolyLine3D curr : m.getMesh().getPolygons()) {
@@ -161,31 +202,33 @@ public class ModelBinaryOperator {
     }
 
     public static Line3D intersection(PolyLine3D p1, PolyLine3D p2) {
-        List<Vector3> lp1 = p1.getPoints();
+        List<Vector3> lp = p1.getPoints();
         List<Line3D> lines = new ArrayList<>();
         int i = 1;
-        for (; i < lp1.size(); i++) {
-            lines.add(new Line3D(lp1.get(i), lp1.get(i - 1)));
+        for (; i < lp.size(); i++) {
+            lines.add(new Line3D(lp.get(i), lp.get(i - 1)));
         }
-        lines.add(new Line3D(lp1.get(0), lp1.get(i - 1)));
+        lines.add(new Line3D(lp.get(0), lp.get(i - 1)));
         List<Vector3> inters = new ArrayList<>();
         for (Line3D l : lines) {
             Vector3 v = intersection(p2, l);
             if (v != null) inters.add(v);
         }
 
-        List<Vector3> lp2 = p1.getPoints();
+        lp = p1.getPoints();
         lines = new ArrayList<>();
         i = 1;
-        for (; i < lp2.size(); i++) {
-            lines.add(new Line3D(lp2.get(i), lp2.get(i - 1)));
+        for (; i < lp.size(); i++) {
+            lines.add(new Line3D(lp.get(i), lp.get(i - 1)));
         }
-        lines.add(new Line3D(lp2.get(0), lp2.get(i - 1)));
+        lines.add(new Line3D(lp.get(0), lp.get(i - 1)));
         for (Line3D l : lines) {
             Vector3 v = intersection(p1, l);
             if (v != null) inters.add(v);
         }
+//        if (inters.size() == 1) return new Line3D(inters.get(0), inters.get(0));
         if (inters.size() == 2) return new Line3D(inters.get(0), inters.get(1));
+//        if (inters.size() > 2) System.out.println(inters.size());
         return null;
     }
 
@@ -299,6 +342,25 @@ public class ModelBinaryOperator {
         return inters.size() % 2 == 1;
     }
 
+    private static boolean isInside(List<PolyLine3D> lp, Vector3 v) {
+        Line3D ray = new Line3D(v, new Vector3(1E+3f, 1E+3f, 1E+3f));
+        Set<Vector3> inters = new HashSet<>();
+        for (PolyLine3D p : lp) {
+            Vector3 curr = intersection(p, ray);
+            if (curr != null) {
+                boolean flag = true;
+                for (Vector3 setv : inters) {
+                    if (similar(setv, curr)) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) inters.add(curr);
+            }
+        }
+        return inters.size() % 2 == 1;
+    }
+
     private static boolean similar(Vector3 v1, Vector3 v2) {
         return Math.abs(v1.getX() - v2.getX()) < 0.1f && Math.abs(v1.getY() - v2.getY()) < 0.1f && Math.abs(v1.getZ() - v2.getZ()) < 0.1f;
     }
@@ -351,7 +413,6 @@ public class ModelBinaryOperator {
         float s4 = MathUtils.square(new float[]{c1, d, a1});
         return Math.abs(s0 - s1 - s2 - s3 - s4) < 1E-3f;
     }
-
 
 
     private static float[] getUV(float[] arr) {
